@@ -1,0 +1,540 @@
+
+{{> head}}
+
+<body class="bg-slate-100 min-h-screen">
+
+  <div class="flex min-h-screen">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col">
+
+      <div class="p-6 border-b border-slate-700">
+        <h1 class="text-2xl font-bold text-amber-400">StaffPay</h1>
+        <p class="text-xs text-slate-400 mt-1">RESTOFLOW MANAGEMENT</p>
+      </div>
+
+      <div class="p-5 border-b border-slate-700">
+        <p class="text-sm text-slate-400">Welcome back,</p>
+        <h2 class="font-semibold text-lg">{{user.name}}</h2>
+        <span class="inline-block mt-2 px-3 py-1 bg-amber-500 text-slate-900 rounded-full text-xs font-bold uppercase">
+          {{user.role}}
+        </span>
+      </div>
+
+      <!-- NAVIGATION -->
+      <nav class="flex-1 p-4 space-y-2">
+
+        <p class="text-xs text-slate-500 uppercase font-bold px-3 mb-3">
+          Main Menu
+        </p>
+
+        {{#if (eq user.role "admin")}}
+
+          <a href="/employees" class="block p-3 rounded-lg hover:bg-slate-700 transition">
+            Employee Management
+          </a>
+
+          <a href="/manager-attendance" class="block p-3 rounded-lg hover:bg-slate-700 transition">
+            Attendance Management
+          </a>
+
+          <a href="/attendance-logs" class="block p-3 rounded-lg hover:bg-slate-700 transition">
+            Attendance Logs
+          </a>
+
+          <a href="/payroll" class="block p-3 rounded-lg hover:bg-slate-700 transition">
+            Payroll Management
+          </a>
+
+          <a href="/deductions" class="block p-3 rounded-lg hover:bg-slate-700 transition">
+            Deduction Management
+          </a>
+
+          <a href="/create-manager-account" class="block p-3 rounded-lg hover:bg-slate-700 transition">
+            Create Manager Account
+          </a>
+
+          <a href="/forgot-password/admin" class="block p-3 rounded-lg hover:bg-slate-700 transition">
+            Admin Password Reset
+          </a>
+
+        {{else if (eq user.role "manager")}}
+
+          <a href="/employees" class="block p-3 rounded-lg hover:bg-slate-700 transition">
+            Employee Management
+          </a>
+
+          <a href="/manager-attendance" class="block p-3 rounded-lg hover:bg-slate-700 transition">
+            Record Attendance
+          </a>
+
+        {{else if (eq user.role "staff")}}
+
+          <a href="/my-attendance" class="block p-3 rounded-lg hover:bg-slate-700 transition">
+            My Attendance
+          </a>
+
+          <a href="/my-payroll" class="block p-3 rounded-lg hover:bg-slate-700 transition">
+            My Payroll
+          </a>
+
+        {{/if}}
+
+      </nav>
+
+      <!-- LOGOUT -->
+      <div class="p-4 border-t border-slate-700">
+        <a href="/logout"
+           class="block text-center bg-red-600 hover:bg-red-700 text-white p-3 rounded-lg font-semibold transition">
+          Logout
+        </a>
+      </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 p-6 md:p-10">
+
+      <!-- PAGE HEADER -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+
+        <div>
+          <h2 class="text-3xl font-bold text-slate-800">
+            Dashboard
+          </h2>
+
+          <p class="text-slate-500 mt-1">
+            Restaurant Staff Attendance and Payroll Management
+          </p>
+        </div>
+
+        <div class="mt-4 md:mt-0 text-sm text-slate-500">
+          RestoFlow System
+        </div>
+
+      </div>
+
+
+      <!-- ADMIN DASHBOARD -->
+      {{#if (eq user.role "admin")}}
+
+        <!-- WELCOME BANNER -->
+        <div class="relative overflow-hidden bg-slate-900 rounded-3xl shadow-xl mb-8">
+
+          <div class="absolute -right-16 -top-16 w-64 h-64 bg-amber-500 opacity-10 rounded-full"></div>
+
+          <div class="absolute right-24 -bottom-24 w-56 h-56 bg-amber-400 opacity-10 rounded-full"></div>
+
+          <div class="relative z-10 p-8 md:p-12">
+
+            <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
+              <span class="w-2 h-2 bg-amber-400 rounded-full"></span>
+              Administrator Dashboard
+            </div>
+
+            <h3 class="text-3xl md:text-5xl font-extrabold text-white leading-tight">
+              Welcome back,
+              <span class="text-amber-400">{{user.name}}!</span>
+            </h3>
+
+            <p class="text-slate-300 mt-5 max-w-2xl leading-relaxed text-sm md:text-base">
+              Welcome to StaffPay, your centralized restaurant staff attendance and payroll management system. Oversee daily operations, maintain accurate records, and manage your workforce efficiently.
+            </p>
+
+            <!-- SYSTEM INFORMATION -->
+            <div class="mt-8 flex flex-wrap gap-3">
+
+              <div class="bg-white/10 border border-white/10 rounded-xl px-5 py-3">
+                <p class="text-xs text-slate-400 uppercase tracking-wide">System</p>
+                <p class="text-white font-bold mt-1">StaffPay</p>
+              </div>
+
+              <div class="bg-white/10 border border-white/10 rounded-xl px-5 py-3">
+                <p class="text-xs text-slate-400 uppercase tracking-wide">Platform</p>
+                <p class="text-white font-bold mt-1">RestoFlow</p>
+              </div>
+
+              <div class="bg-white/10 border border-white/10 rounded-xl px-5 py-3">
+                <p class="text-xs text-slate-400 uppercase tracking-wide">Access Level</p>
+                <p class="text-amber-400 font-bold mt-1">Administrator</p>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- ADMINISTRATION INFORMATION -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+
+          <div class="flex items-center gap-4 mb-5">
+
+            <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center">
+              <span class="text-3xl">⚙️</span>
+            </div>
+
+            <div>
+              <h4 class="text-xl font-bold text-slate-800">
+                System Administration
+              </h4>
+
+              <p class="text-sm text-slate-500">
+                Manage and oversee StaffPay operations.
+              </p>
+            </div>
+
+          </div>
+
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Use the navigation menu on the left side of your dashboard to access employee management, attendance monitoring, payroll processing, deductions, manager accounts, and password administration.
+          </p>
+
+          <div class="mt-6 pt-5 border-t border-slate-100">
+            <p class="text-xs text-slate-400 font-medium uppercase tracking-wider">
+              StaffPay — Restaurant Staff Attendance and Payroll Management
+            </p>
+          </div>
+
+        </div>
+
+
+      <!-- MANAGER DASHBOARD -->
+      {{else if (eq user.role "manager")}}
+
+        <!-- MANAGER WELCOME -->
+        <div class="bg-white rounded-2xl shadow-sm p-8 border-l-4 border-amber-500 mb-6">
+
+          <p class="text-sm text-slate-500 font-semibold uppercase">
+            Manager Dashboard
+          </p>
+
+          <h3 class="text-2xl font-bold text-slate-800 mt-2">
+            Welcome, {{user.name}}!
+          </h3>
+
+          <p class="text-slate-500 mt-2">
+            Manage restaurant employees and monitor their daily attendance.
+          </p>
+
+        </div>
+
+
+        <!-- MANAGER ATTENDANCE SUMMARY -->
+        <div class="mb-8">
+
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
+            <div>
+              <h3 class="text-xl font-bold text-slate-800">
+                Today's Attendance Summary
+              </h3>
+
+              <p class="text-sm text-slate-500">
+                Attendance records of active employees.
+              </p>
+            </div>
+
+            <a href="/manager-attendance"
+               class="text-amber-600 font-semibold text-sm hover:text-amber-700">
+              View Attendance →
+            </a>
+          </div>
+
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+            <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+              <p class="text-sm text-slate-500">Total Employees</p>
+              <h4 class="text-3xl font-bold text-slate-800 mt-2">
+                {{managerAttendanceSummary.total}}
+              </h4>
+            </div>
+
+            <div class="bg-white rounded-xl border border-green-200 p-5 shadow-sm">
+              <p class="text-sm text-green-600 font-semibold">Present</p>
+              <h4 class="text-3xl font-bold text-green-700 mt-2">
+                {{managerAttendanceSummary.present}}
+              </h4>
+            </div>
+
+            <div class="bg-white rounded-xl border border-amber-200 p-5 shadow-sm">
+              <p class="text-sm text-amber-600 font-semibold">Late</p>
+              <h4 class="text-3xl font-bold text-amber-700 mt-2">
+                {{managerAttendanceSummary.late}}
+              </h4>
+            </div>
+
+            <div class="bg-white rounded-xl border border-blue-200 p-5 shadow-sm">
+              <p class="text-sm text-blue-600 font-semibold">Half Day</p>
+              <h4 class="text-3xl font-bold text-blue-700 mt-2">
+                {{managerAttendanceSummary.half_day}}
+              </h4>
+            </div>
+
+            <div class="bg-white rounded-xl border border-purple-200 p-5 shadow-sm">
+              <p class="text-sm text-purple-600 font-semibold">Excuse Letter</p>
+              <h4 class="text-3xl font-bold text-purple-700 mt-2">
+                {{managerAttendanceSummary.excuse_letter}}
+              </h4>
+            </div>
+
+            <div class="bg-white rounded-xl border border-red-200 p-5 shadow-sm">
+              <p class="text-sm text-red-600 font-semibold">Absent</p>
+              <h4 class="text-3xl font-bold text-red-700 mt-2">
+                {{managerAttendanceSummary.absent}}
+              </h4>
+            </div>
+
+          </div>
+
+
+          <div class="bg-white rounded-xl border border-slate-200 p-5 mt-4">
+            <p class="text-sm text-slate-500 font-semibold">
+              Not Yet Recorded
+            </p>
+
+            <h4 class="text-2xl font-bold text-slate-700 mt-1">
+              {{managerAttendanceSummary.not_recorded}}
+            </h4>
+
+            <p class="text-xs text-slate-400 mt-1">
+              Employees without an attendance record today.
+            </p>
+          </div>
+
+        </div>
+
+
+        <!-- MANAGER MODULES -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+          <a href="/employees" class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition border border-slate-200">
+
+            <h4 class="font-bold text-slate-800 text-lg">
+              Employee Management
+            </h4>
+
+            <p class="text-slate-500 text-sm mt-2">
+              Register and view restaurant employees.
+            </p>
+
+            <p class="text-amber-600 font-semibold mt-5">
+              Open Module →
+            </p>
+
+          </a>
+
+
+          <a href="/manager-attendance" class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition border border-slate-200">
+
+            <h4 class="font-bold text-slate-800 text-lg">
+              Record Attendance
+            </h4>
+
+            <p class="text-slate-500 text-sm mt-2">
+              Record verified employee time-in, time-out, and attendance status.
+            </p>
+
+            <p class="text-amber-600 font-semibold mt-5">
+              Open Module →
+            </p>
+
+          </a>
+
+        </div>
+
+
+      <!-- STAFF DASHBOARD -->
+      {{else if (eq user.role "staff")}}
+
+        <!-- STAFF WELCOME -->
+        <div class="bg-white rounded-2xl shadow-sm p-8 border-l-4 border-amber-500 mb-6">
+
+          <p class="text-sm text-slate-500 font-semibold uppercase">
+            Staff Dashboard
+          </p>
+
+          <h3 class="text-2xl font-bold text-slate-800 mt-2">
+            Welcome, {{user.name}}!
+          </h3>
+
+          <p class="text-slate-500 mt-2">
+            View your personal attendance status and payroll information.
+          </p>
+
+        </div>
+
+
+        <!-- STAFF TODAY ATTENDANCE -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+
+            <div>
+              <h3 class="text-xl font-bold text-slate-800">
+                My Attendance Today
+              </h3>
+
+              <p class="text-sm text-slate-500 mt-1">
+                Your attendance record for today.
+              </p>
+            </div>
+
+            <a href="/my-attendance"
+               class="text-amber-600 font-semibold text-sm hover:text-amber-700">
+              View Attendance History →
+            </a>
+
+          </div>
+
+
+          <!-- STAFF STATUS -->
+          <div class="mb-6">
+
+            {{#if (eq staffAttendance.status "present")}}
+
+              <span class="inline-block bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-bold">
+                Present
+              </span>
+
+            {{else if (eq staffAttendance.status "late")}}
+
+              <span class="inline-block bg-amber-100 text-amber-700 px-4 py-2 rounded-full text-sm font-bold">
+                Late
+              </span>
+
+            {{else if (eq staffAttendance.status "half_day")}}
+
+              <span class="inline-block bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-bold">
+                Half Day
+              </span>
+
+            {{else if (eq staffAttendance.status "excuse_letter")}}
+
+              <span class="inline-block bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-bold">
+                Excuse Letter
+              </span>
+
+            {{else if (eq staffAttendance.status "absent")}}
+
+              <span class="inline-block bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-bold">
+                Absent
+              </span>
+
+            {{else}}
+
+              <span class="inline-block bg-slate-100 text-slate-600 px-4 py-2 rounded-full text-sm font-bold">
+                Not Yet Recorded
+              </span>
+
+            {{/if}}
+
+          </div>
+
+
+          <!-- TIME DETAILS -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+            <div class="bg-slate-50 rounded-xl p-5">
+              <p class="text-sm text-slate-500">Time In</p>
+
+              <h4 class="text-xl font-bold text-slate-800 mt-2">
+                {{#if staffAttendance.time_in}}
+                  {{staffAttendance.time_in}}
+                {{else}}
+                  —
+                {{/if}}
+              </h4>
+            </div>
+
+
+            <div class="bg-slate-50 rounded-xl p-5">
+              <p class="text-sm text-slate-500">Time Out</p>
+
+              <h4 class="text-xl font-bold text-slate-800 mt-2">
+                {{#if staffAttendance.time_out}}
+                  {{staffAttendance.time_out}}
+                {{else}}
+                  —
+                {{/if}}
+              </h4>
+            </div>
+
+          </div>
+
+
+          <!-- REMARKS -->
+          <div class="mt-4 bg-slate-50 rounded-xl p-5">
+
+            <p class="text-sm text-slate-500 font-semibold">
+              Remarks
+            </p>
+
+            <p class="text-slate-700 mt-2">
+              {{#if staffAttendance.remarks}}
+                {{staffAttendance.remarks}}
+              {{else}}
+                No remarks recorded.
+              {{/if}}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- STAFF MODULES -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+          <a href="/my-attendance" class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition border border-slate-200">
+
+            <h4 class="font-bold text-slate-800 text-lg">
+              My Attendance
+            </h4>
+
+            <p class="text-slate-500 text-sm mt-2">
+              View your recorded attendance history.
+            </p>
+
+            <p class="text-amber-600 font-semibold mt-5">
+              Open Module →
+            </p>
+
+          </a>
+
+
+          <a href="/my-payroll" class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition border border-slate-200">
+
+            <h4 class="font-bold text-slate-800 text-lg">
+              My Payroll
+            </h4>
+
+            <p class="text-slate-500 text-sm mt-2">
+              View your salary and payroll records.
+            </p>
+
+            <p class="text-amber-600 font-semibold mt-5">
+              Open Module →
+            </p>
+
+          </a>
+
+        </div>
+
+      {{/if}}
+
+
+      <!-- FOOTER -->
+      <footer class="mt-10 pt-6 border-t border-slate-200 text-center">
+        <p class="text-xs text-slate-400">
+          © StaffPay | RestoFlow Restaurant Management System
+        </p>
+      </footer>
+
+    </main>
+
+  </div>
+
+</body>
+</html>

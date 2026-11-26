@@ -1,0 +1,362 @@
+
+{{> head}}
+
+<body class="bg-slate-100 min-h-screen">
+
+  <div class="max-w-7xl mx-auto p-6 md:p-10">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div>
+        <p class="text-amber-600 font-bold text-sm uppercase tracking-wider">
+          StaffPay Management
+        </p>
+
+        <h1 class="text-3xl font-bold text-slate-800 mt-1">
+          Attendance Management
+        </h1>
+
+        <p class="text-slate-500 mt-2">
+          Record and monitor employee Time-in and Time-out.
+        </p>
+      </div>
+
+      <a href="/dashboard"
+         class="bg-slate-800 hover:bg-slate-700 text-white px-5 py-3 rounded-lg text-center font-semibold">
+        Back to Dashboard
+      </a>
+    </div>
+
+
+    <!-- ATTENDANCE TABLE -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+
+      <div class="p-6 border-b border-slate-200">
+        <h2 class="text-xl font-bold text-slate-800">
+          Today's Employee Attendance
+        </h2>
+
+        <p class="text-sm text-slate-500 mt-1">
+          Verify employee presence before recording attendance.
+        </p>
+      </div>
+
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full text-sm text-left">
+
+          <thead class="bg-slate-800 text-white uppercase text-xs">
+            <tr>
+              <th class="px-5 py-4">Employee Code</th>
+              <th class="px-5 py-4">Employee Name</th>
+              <th class="px-5 py-4">Position</th>
+              <th class="px-5 py-4">Time In</th>
+              <th class="px-5 py-4">Time Out</th>
+              <th class="px-5 py-4">Status</th>
+              <th class="px-5 py-4">Remarks</th>
+              <th class="px-5 py-4 text-center">Action</th>
+            </tr>
+          </thead>
+
+
+          <tbody class="divide-y divide-slate-100">
+
+            {{#each employees}}
+
+            <tr class="hover:bg-slate-50 transition">
+
+              <!-- EMPLOYEE CODE -->
+              <td class="px-5 py-4 font-semibold text-slate-800">
+                {{this.employee_code}}
+              </td>
+
+
+              <!-- EMPLOYEE NAME -->
+              <td class="px-5 py-4 text-slate-700 font-medium">
+                {{this.first_name}} {{this.last_name}}
+              </td>
+
+
+              <!-- POSITION -->
+              <td class="px-5 py-4 text-slate-600">
+                {{this.position}}
+              </td>
+
+
+              <!-- TIME IN -->
+              <td class="px-5 py-4 text-slate-600">
+
+                {{#if this.attendances}}
+                  {{#each this.attendances}}
+                    {{#if this.time_in}}
+                      {{this.time_in}}
+                    {{else}}
+                      —
+                    {{/if}}
+                  {{/each}}
+                {{else}}
+                  —
+                {{/if}}
+
+              </td>
+
+
+              <!-- TIME OUT -->
+              <td class="px-5 py-4 text-slate-600">
+
+                {{#if this.attendances}}
+                  {{#each this.attendances}}
+                    {{#if this.time_out}}
+                      {{this.time_out}}
+                    {{else}}
+                      —
+                    {{/if}}
+                  {{/each}}
+                {{else}}
+                  —
+                {{/if}}
+
+              </td>
+
+
+              <!-- STATUS -->
+              <td class="px-5 py-4">
+
+                {{#if this.attendances}}
+
+                  {{#each this.attendances}}
+
+                    {{#if (eq this.status "present")}}
+
+                      <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">
+                        Present
+                      </span>
+
+                    {{else if (eq this.status "late")}}
+
+                      <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold">
+                        Late
+                      </span>
+
+                    {{else if (eq this.status "half_day")}}
+
+                      <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">
+                        Half Day
+                      </span>
+
+                    {{else if (eq this.status "excuse_letter")}}
+
+                      <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold">
+                        Excuse Letter
+                      </span>
+
+                    {{else if (eq this.status "absent")}}
+
+                      <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">
+                        Absent
+                      </span>
+
+                    {{else}}
+
+                      <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">
+                        {{this.status}}
+                      </span>
+
+                    {{/if}}
+
+                  {{/each}}
+
+                {{else}}
+
+                  <span class="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-xs font-bold">
+                    Not Recorded
+                  </span>
+
+                {{/if}}
+
+              </td>
+
+
+              <!-- REMARKS -->
+              <td class="px-5 py-4 text-slate-600">
+
+                {{#if this.attendances}}
+                  {{#each this.attendances}}
+                    {{#if this.remarks}}
+                      {{this.remarks}}
+                    {{else}}
+                      —
+                    {{/if}}
+                  {{/each}}
+                {{else}}
+                  —
+                {{/if}}
+
+              </td>
+
+
+              <!-- ACTION -->
+              <td class="px-5 py-4 text-center">
+
+                {{#if this.attendances}}
+
+                  {{#each this.attendances}}
+
+                    {{#if (eq this.status "absent")}}
+
+                      <span class="inline-block bg-red-100 text-red-700 px-3 py-2 rounded-lg text-xs font-bold">
+                        Absent Recorded
+                      </span>
+
+                    {{else if (eq this.status "excuse_letter")}}
+
+                      <span class="inline-block bg-purple-100 text-purple-700 px-3 py-2 rounded-lg text-xs font-bold">
+                        Excuse Letter Recorded
+                      </span>
+
+                    {{else if this.time_out}}
+
+                      <span class="inline-block bg-green-100 text-green-700 px-3 py-2 rounded-lg text-xs font-bold">
+                        Completed
+                      </span>
+
+                    {{else}}
+
+                      <form action="/manager-attendance/time-out"
+                            method="POST"
+                            class="flex flex-col gap-2 min-w-[170px]">
+
+                        <input type="hidden"
+                               name="employee_id"
+                               value="{{../id}}">
+
+                        <input type="text"
+                               name="remarks"
+                               placeholder="Optional remarks"
+                               class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+
+                        <button type="submit"
+                                class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 px-4 py-2 rounded-lg font-bold transition">
+                          Time Out
+                        </button>
+
+                      </form>
+
+                    {{/if}}
+
+                  {{/each}}
+
+                {{else}}
+
+                  <div class="flex flex-col gap-2 min-w-[170px]">
+
+                    <!-- TIME IN -->
+                    <form action="/manager-attendance/time-in"
+                          method="POST">
+
+                      <input type="hidden"
+                             name="employee_id"
+                             value="{{this.id}}">
+
+                      <button type="submit"
+                              class="w-full bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-bold transition">
+                        Time In
+                      </button>
+
+                    </form>
+
+
+                    <!-- MARK ABSENT -->
+                    <form action="/manager-attendance/absent"
+                          method="POST"
+                          onsubmit="return confirm('Are you sure you want to mark this employee as absent?');">
+
+                      <input type="hidden"
+                             name="employee_id"
+                             value="{{this.id}}">
+
+                      <input type="text"
+                             name="remarks"
+                             placeholder="Reason / Remarks (optional)"
+                             class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400">
+
+                      <button type="submit"
+                              class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold transition">
+                        Mark Absent
+                      </button>
+
+                    </form>
+
+                  </div>
+
+                {{/if}}
+
+              </td>
+
+            </tr>
+
+
+            {{else}}
+
+            <tr>
+              <td colspan="8"
+                  class="px-5 py-10 text-center text-slate-400">
+                No active employees found.
+              </td>
+            </tr>
+
+            {{/each}}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- STATUS LEGEND -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 mt-6 p-5">
+
+      <h3 class="font-bold text-slate-800 mb-3">
+        Attendance Status Guide
+      </h3>
+
+      <div class="flex flex-wrap gap-3 text-xs font-bold">
+
+        <span class="bg-green-100 text-green-700 px-3 py-2 rounded-full">
+          Present — 1 Day
+        </span>
+
+        <span class="bg-amber-100 text-amber-700 px-3 py-2 rounded-full">
+          Late — 1 Day + Late Policy
+        </span>
+
+        <span class="bg-blue-100 text-blue-700 px-3 py-2 rounded-full">
+          Half Day — 0.5 Day
+        </span>
+
+        <span class="bg-purple-100 text-purple-700 px-3 py-2 rounded-full">
+          Excuse Letter — 0 Day
+        </span>
+
+        <span class="bg-red-100 text-red-700 px-3 py-2 rounded-full">
+          Absent — 0 Day
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer class="text-center text-sm text-slate-400 mt-10">
+      © 2026 StaffPay — RestoFlow. All rights reserved.
+    </footer>
+
+  </div>
+
+</body>
+</html>

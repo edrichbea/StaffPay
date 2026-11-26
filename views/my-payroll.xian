@@ -1,0 +1,134 @@
+{{> head}}
+<body class="bg-gray-100 min-h-screen">
+
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-900 text-white p-6 hidden md:block">
+      <h1 class="text-2xl font-bold text-yellow-400 mb-2">StaffPay</h1>
+      <p class="text-gray-400 text-sm mb-10">Employee Portal</p>
+
+      <nav class="space-y-3">
+        <a href="/dashboard" class="block px-4 py-3 rounded-lg hover:bg-slate-700">
+          Dashboard
+        </a>
+
+        <a href="/my-attendance" class="block px-4 py-3 rounded-lg hover:bg-slate-700">
+          My Attendance
+        </a>
+
+        <a href="/my-payroll" class="block px-4 py-3 rounded-lg bg-yellow-500 text-slate-900 font-semibold">
+          My Payroll
+        </a>
+
+        <a href="/logout" class="block px-4 py-3 rounded-lg hover:bg-red-600 mt-10">
+          Logout
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 min-w-0 p-6 md:p-10">
+
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold text-slate-900">My Payroll</h2>
+        <p class="text-gray-500 mt-2">View your personal salary and payment information.</p>
+      </div>
+
+      <!-- Payroll Card -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+
+        <div class="bg-slate-900 text-white p-5">
+          <h3 class="text-lg font-semibold">Payroll History</h3>
+          <p class="text-gray-300 text-sm mt-1">
+            Your salary computation and payment records
+          </p>
+        </div>
+
+        <div class="overflow-x-auto p-5">
+          <table class="w-full text-left border-collapse whitespace-nowrap">
+
+            <thead>
+              <tr class="bg-gray-100 text-slate-700">
+                <th class="p-4 border-b">Pay Period</th>
+                <th class="p-4 border-b">Daily Rate</th>
+                <th class="p-4 border-b">Days Worked</th>
+                <th class="p-4 border-b">Basic Pay</th>
+                <th class="p-4 border-b">Overtime Hours</th>
+                <th class="p-4 border-b">Overtime Pay</th>
+                <th class="p-4 border-b">Deductions</th>
+                <th class="p-4 border-b">Net Pay</th>
+                <th class="p-4 border-b">Payment Status</th>
+                <th class="p-4 border-b">Payment Date</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {{#each payrolls}}
+              <tr class="hover:bg-gray-50">
+
+                <td class="p-4 border-b text-gray-700">
+                  {{this.pay_period_start}} to {{this.pay_period_end}}
+                </td>
+
+                <td class="p-4 border-b text-gray-700">₱{{this.daily_rate}}</td>
+                <td class="p-4 border-b text-gray-700">{{this.days_worked}}</td>
+                <td class="p-4 border-b text-gray-700">₱{{this.basic_pay}}</td>
+                <td class="p-4 border-b text-gray-700">{{this.overtime_hours}}</td>
+                <td class="p-4 border-b text-gray-700">₱{{this.overtime_pay}}</td>
+                <td class="p-4 border-b text-red-600">₱{{this.total_deductions}}</td>
+
+                <td class="p-4 border-b font-bold text-slate-900">
+                  ₱{{this.net_pay}}
+                </td>
+
+                <td class="p-4 border-b">
+                  {{#if (eq this.payment_status "released")}}
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+                      Released
+                    </span>
+                  {{else}}
+                    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold">
+                      Pending
+                    </span>
+                  {{/if}}
+                </td>
+
+                <td class="p-4 border-b text-gray-700">
+                  {{#if this.payment_date}}
+                    {{this.payment_date}}
+                  {{else}}
+                    Not yet paid
+                  {{/if}}
+                </td>
+
+              </tr>
+              {{else}}
+              <tr>
+                <td colspan="10" class="p-8 text-center text-gray-500">
+                  No payroll records found.
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <a href="/dashboard"
+           class="inline-block bg-slate-900 hover:bg-slate-700 text-white px-5 py-3 rounded-lg font-medium">
+          Back to Dashboard
+        </a>
+      </div>
+
+      <footer class="mt-10 text-center text-gray-400 text-sm">
+        © 2026 StaffPay | Restaurant Staff Attendance and Payroll Management System
+      </footer>
+
+    </main>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+
+{{> head}}
+
+<body class="bg-slate-100 min-h-screen">
+
+  <div class="max-w-7xl mx-auto p-6 md:p-10">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div>
+        <p class="text-amber-600 font-bold text-sm uppercase tracking-wider">
+          StaffPay Management
+        </p>
+        <h1 class="text-3xl font-bold text-slate-800 mt-1">
+          Deduction Management
+        </h1>
+        <p class="text-slate-500 mt-2">
+          Record and manage authorized employee salary deductions.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="/deductions/history"
+           class="bg-amber-500 hover:bg-amber-600 text-slate-900 px-5 py-3 rounded-lg text-center font-bold">
+          Deduction History
+        </a>
+
+        <a href="/dashboard"
+           class="bg-slate-800 hover:bg-slate-700 text-white px-5 py-3 rounded-lg text-center font-semibold">
+          Back to Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- ADD DEDUCTION FORM -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+
+      <div class="mb-6">
+        <h2 class="text-xl font-bold text-slate-800">
+          Add Employee Deduction
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">
+          Enter the employee and deduction information below.
+        </p>
+      </div>
+
+      <form action="/deductions" method="POST"
+            class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Employee
+          </label>
+          <select name="employee_id" required
+                  class="w-full border border-slate-300 rounded-lg p-3 bg-white focus:outline-none focus:ring-2 focus:ring-amber-400">
+            <option value="">Select Employee</option>
+
+            {{#each employees}}
+            <option value="{{this.id}}">
+              {{this.employee_code}} - {{this.first_name}} {{this.last_name}}
+            </option>
+            {{/each}}
+
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Deduction Type
+          </label>
+          <select name="deduction_type" required
+                  class="w-full border border-slate-300 rounded-lg p-3 bg-white focus:outline-none focus:ring-2 focus:ring-amber-400">
+            <option value="">Select Deduction Type</option>
+            <option value="Cash Advance">Cash Advance</option>
+            <option value="Other Authorized Deduction">Other Authorized Deduction</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Description
+          </label>
+          <input type="text" name="description"
+                 placeholder="Enter deduction details"
+                 class="w-full border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-amber-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Amount (₱)
+          </label>
+          <input type="number" name="amount" min="0.01" step="0.01"
+                 placeholder="Enter amount" required
+                 class="w-full border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-amber-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Deduction Date
+          </label>
+          <input type="date" name="deduction_date" required
+                 class="w-full border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-amber-400">
+        </div>
+
+        <div class="md:col-span-2">
+          <button type="submit"
+                  class="bg-amber-500 hover:bg-amber-600 text-slate-900 px-6 py-3 rounded-lg font-bold transition">
+            Add Deduction
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- ACTIVE DEDUCTION RECORDS -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+
+      <div class="p-6 border-b border-slate-200">
+        <h2 class="text-xl font-bold text-slate-800">
+          Active Deductions
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">
+          View deductions that are still pending payroll release.
+        </p>
+      </div>
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full text-sm text-left">
+
+          <thead class="bg-slate-800 text-white uppercase text-xs">
+            <tr>
+              <th class="px-5 py-4">Employee</th>
+              <th class="px-5 py-4">Deduction Type</th>
+              <th class="px-5 py-4">Description</th>
+              <th class="px-5 py-4">Amount</th>
+              <th class="px-5 py-4">Deduction Date</th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-slate-100">
+
+            {{#each deductions}}
+
+            <tr class="hover:bg-slate-50 transition">
+
+              <td class="px-5 py-4 font-semibold text-slate-800 whitespace-nowrap">
+                {{this.employee.first_name}}
+                {{this.employee.last_name}}
+              </td>
+
+              <td class="px-5 py-4">
+                <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold">
+                  {{this.deduction_type}}
+                </span>
+              </td>
+
+              <td class="px-5 py-4 text-slate-600">
+                {{this.description}}
+              </td>
+
+              <td class="px-5 py-4 font-bold text-red-600 whitespace-nowrap">
+                ₱{{this.amount}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600 whitespace-nowrap">
+                {{this.deduction_date}}
+              </td>
+
+            </tr>
+
+            {{else}}
+
+            <tr>
+              <td colspan="5" class="px-5 py-10 text-center text-slate-400">
+                No active deductions found.
+              </td>
+            </tr>
+
+            {{/each}}
+
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+
+    <footer class="text-center text-sm text-slate-400 mt-10">
+      © 2026 StaffPay — RestoFlow. All rights reserved.
+    </footer>
+
+  </div>
+
+</body>
+</html>

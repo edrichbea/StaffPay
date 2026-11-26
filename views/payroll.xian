@@ -1,0 +1,214 @@
+
+{{> head}}
+
+<body class="bg-slate-100 min-h-screen">
+
+  <div class="max-w-7xl mx-auto p-6 md:p-10">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div>
+        <p class="text-amber-600 font-bold text-sm uppercase tracking-wider">
+          StaffPay Management
+        </p>
+        <h1 class="text-3xl font-bold text-slate-800 mt-1">
+          Payroll Management
+        </h1>
+        <p class="text-slate-500 mt-2">
+          Generate, review, and release employee payroll records.
+        </p>
+      </div>
+
+      <a href="/dashboard"
+         class="bg-slate-800 hover:bg-slate-700 text-white px-5 py-3 rounded-lg text-center font-semibold">
+        Back to Dashboard
+      </a>
+    </div>
+
+    <!-- GENERATE PAYROLL -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+
+      <div class="mb-6">
+        <h2 class="text-xl font-bold text-slate-800">
+          Generate Payroll
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">
+          Select the pay period to calculate employee salaries.
+        </p>
+      </div>
+
+      <form action="/payroll/generate" method="POST"
+            class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Pay Period Start
+          </label>
+          <input type="date" name="pay_period_start" required
+                 class="w-full border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-amber-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Pay Period End
+          </label>
+          <input type="date" name="pay_period_end" required
+                 class="w-full border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-amber-400">
+        </div>
+
+        <div class="md:col-span-2">
+          <button type="submit"
+                  class="bg-amber-500 hover:bg-amber-600 text-slate-900 px-6 py-3 rounded-lg font-bold transition">
+            Generate Payroll
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- PAYROLL RECORDS -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+
+      <div class="p-6 border-b border-slate-200">
+        <h2 class="text-xl font-bold text-slate-800">
+          Payroll Records
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">
+          Review employee salary details and payment status.
+        </p>
+      </div>
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full text-sm text-left">
+
+          <thead class="bg-slate-800 text-white uppercase text-xs">
+            <tr>
+              <th class="px-5 py-4">Employee</th>
+              <th class="px-5 py-4">Pay Period</th>
+              <th class="px-5 py-4">Daily Rate</th>
+              <th class="px-5 py-4">Days Worked</th>
+              <th class="px-5 py-4">Basic Pay</th>
+              <th class="px-5 py-4">OT Hours</th>
+              <th class="px-5 py-4">OT Pay</th>
+              <th class="px-5 py-4">Deductions</th>
+              <th class="px-5 py-4">Net Pay</th>
+              <th class="px-5 py-4">Payment Status</th>
+              <th class="px-5 py-4">Payment Date</th>
+              <th class="px-5 py-4">Action</th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-slate-100">
+
+            {{#each payrolls}}
+
+            <tr class="hover:bg-slate-50 transition">
+
+              <td class="px-5 py-4 font-semibold text-slate-800 whitespace-nowrap">
+                {{this.employee.first_name}}
+                {{this.employee.last_name}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600 whitespace-nowrap">
+                {{this.pay_period_start}} to {{this.pay_period_end}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600 whitespace-nowrap">
+                ₱{{this.daily_rate}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600">
+                {{this.days_worked}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600 whitespace-nowrap">
+                ₱{{this.basic_pay}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600">
+                {{this.overtime_hours}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600 whitespace-nowrap">
+                ₱{{this.overtime_pay}}
+              </td>
+
+              <td class="px-5 py-4 text-red-600 whitespace-nowrap">
+                ₱{{this.total_deductions}}
+              </td>
+
+              <td class="px-5 py-4 font-bold text-slate-800 whitespace-nowrap">
+                ₱{{this.net_pay}}
+              </td>
+
+              <td class="px-5 py-4">
+                {{#if (eq this.payment_status "pending")}}
+                  <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold">
+                    Pending
+                  </span>
+                {{else}}
+                  <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">
+                    Released
+                  </span>
+                {{/if}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600 whitespace-nowrap">
+                {{#if this.payment_date}}
+                  {{this.payment_date}}
+                {{else}}
+                  —
+                {{/if}}
+              </td>
+
+              <td class="px-5 py-4">
+
+                {{#if (eq this.payment_status "pending")}}
+
+                  <form action="/payroll/release" method="POST">
+                    <input type="hidden" name="payroll_id" value="{{this.id}}">
+
+                    <button type="submit"
+                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-bold text-xs whitespace-nowrap transition">
+                      Release Payroll
+                    </button>
+                  </form>
+
+                {{else}}
+
+                  <span class="text-green-700 font-bold text-xs">
+                    Released
+                  </span>
+
+                {{/if}}
+
+              </td>
+
+            </tr>
+
+            {{else}}
+
+            <tr>
+              <td colspan="12" class="px-5 py-10 text-center text-slate-400">
+                No payroll records found.
+              </td>
+            </tr>
+
+            {{/each}}
+
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+
+    <footer class="text-center text-sm text-slate-400 mt-10">
+      © 2026 StaffPay — RestoFlow. All rights reserved.
+    </footer>
+
+  </div>
+
+</body>
+</html>

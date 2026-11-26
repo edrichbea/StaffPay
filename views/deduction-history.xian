@@ -1,0 +1,163 @@
+
+{{> head}}
+
+<body class="bg-slate-100 min-h-screen">
+
+  <div class="max-w-7xl mx-auto p-6 md:p-10">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+
+      <div>
+        <p class="text-amber-600 font-bold text-sm uppercase tracking-wider">
+          StaffPay Management
+        </p>
+
+        <h1 class="text-3xl font-bold text-slate-800 mt-1">
+          Deduction History
+        </h1>
+
+        <p class="text-slate-500 mt-2">
+          View all completed employee salary deductions.
+        </p>
+      </div>
+
+      <a href="/deductions"
+         class="bg-slate-800 hover:bg-slate-700 text-white px-5 py-3 rounded-lg text-center font-semibold">
+        Back to Deduction Management
+      </a>
+
+    </div>
+
+    <!-- HISTORY INFORMATION -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+
+      <div class="flex items-center gap-4">
+
+        <div class="bg-green-100 text-green-600 w-14 h-14 rounded-xl flex items-center justify-center text-2xl font-bold">
+          ✓
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-slate-800">
+            Completed Deductions
+          </h2>
+
+          <p class="text-sm text-slate-500 mt-1">
+            These deductions have already been included in released payroll.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- DEDUCTION HISTORY TABLE -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+
+      <div class="p-6 border-b border-slate-200">
+
+        <h2 class="text-xl font-bold text-slate-800">
+          Processed Deduction Records
+        </h2>
+
+        <p class="text-sm text-slate-500 mt-1">
+          Historical records of deductions already deducted from employee salaries.
+        </p>
+
+      </div>
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full text-sm text-left">
+
+          <thead class="bg-slate-800 text-white uppercase text-xs">
+            <tr>
+              <th class="px-5 py-4">Employee</th>
+              <th class="px-5 py-4">Deduction Type</th>
+              <th class="px-5 py-4">Description</th>
+              <th class="px-5 py-4">Amount</th>
+              <th class="px-5 py-4">Deduction Date</th>
+              <th class="px-5 py-4">Status</th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-slate-100">
+
+            {{#each deductions}}
+
+            <tr class="hover:bg-slate-50 transition">
+
+              <td class="px-5 py-4 font-semibold text-slate-800 whitespace-nowrap">
+                {{this.employee.first_name}}
+                {{this.employee.last_name}}
+              </td>
+
+              <td class="px-5 py-4">
+                <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold">
+                  {{this.deduction_type}}
+                </span>
+              </td>
+
+              <td class="px-5 py-4 text-slate-600">
+                {{#if this.description}}
+                  {{this.description}}
+                {{else}}
+                  —
+                {{/if}}
+              </td>
+
+              <td class="px-5 py-4 font-bold text-red-600 whitespace-nowrap">
+                ₱{{this.amount}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600 whitespace-nowrap">
+                {{this.deduction_date}}
+              </td>
+
+              <td class="px-5 py-4">
+                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">
+                  Processed
+                </span>
+              </td>
+
+            </tr>
+
+            {{else}}
+
+            <tr>
+              <td colspan="6" class="px-5 py-12 text-center">
+
+                <div class="text-4xl text-slate-300 mb-3">
+                  ✓
+                </div>
+
+                <p class="font-semibold text-slate-500">
+                  No deduction history found.
+                </p>
+
+                <p class="text-sm text-slate-400 mt-1">
+                  Completed deductions will appear here after payroll release.
+                </p>
+
+              </td>
+            </tr>
+
+            {{/each}}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <footer class="text-center text-sm text-slate-400 mt-10">
+      © 2026 StaffPay — RestoFlow. All rights reserved.
+    </footer>
+
+  </div>
+
+</body>
+</html>

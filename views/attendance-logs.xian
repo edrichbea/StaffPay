@@ -1,0 +1,135 @@
+
+{{> head}}
+
+<body class="bg-slate-100 min-h-screen">
+
+  <div class="max-w-7xl mx-auto p-6 md:p-10">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div>
+        <p class="text-amber-600 font-bold text-sm uppercase tracking-wider">
+          StaffPay Monitoring
+        </p>
+        <h1 class="text-3xl font-bold text-slate-800 mt-1">
+          Attendance Activity Logs
+        </h1>
+        <p class="text-slate-500 mt-2">
+          Monitor employee attendance activities and identify who recorded them.
+        </p>
+      </div>
+
+      <a href="/dashboard"
+         class="bg-slate-800 hover:bg-slate-700 text-white px-5 py-3 rounded-lg text-center font-semibold">
+        Back to Dashboard
+      </a>
+    </div>
+
+    <!-- LOGS TABLE -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+
+      <div class="p-6 border-b border-slate-200">
+        <h2 class="text-xl font-bold text-slate-800">
+          Attendance History
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">
+          Recorded attendance transactions and activity details.
+        </p>
+      </div>
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full text-sm text-left">
+
+          <thead class="bg-slate-800 text-white uppercase text-xs">
+            <tr>
+              <th class="px-5 py-4">Employee Code</th>
+              <th class="px-5 py-4">Employee Name</th>
+              <th class="px-5 py-4">Recorded By</th>
+              <th class="px-5 py-4">Role</th>
+              <th class="px-5 py-4">Action</th>
+              <th class="px-5 py-4">Details</th>
+              <th class="px-5 py-4">Date</th>
+              <th class="px-5 py-4">Time</th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-slate-100">
+
+            {{#each logs}}
+
+            <tr class="hover:bg-slate-50 transition">
+
+              <td class="px-5 py-4 font-semibold text-slate-800">
+                {{this.employee.employee_code}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-700 font-medium">
+                {{this.employee.first_name}} {{this.employee.last_name}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600">
+                {{this.performer.name}}
+              </td>
+
+              <td class="px-5 py-4">
+                <span class="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-bold">
+                  {{this.performer.role}}
+                </span>
+              </td>
+
+              <td class="px-5 py-4">
+                {{#if (eq this.action "time_in")}}
+                  <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">
+                    Time In
+                  </span>
+                {{else if (eq this.action "time_out")}}
+                  <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold">
+                    Time Out
+                  </span>
+                {{else}}
+                  <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">
+                    {{this.action}}
+                  </span>
+                {{/if}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600 min-w-48">
+                {{this.details}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600 whitespace-nowrap">
+                {{this.formattedDate}}
+              </td>
+
+              <td class="px-5 py-4 text-slate-600 whitespace-nowrap">
+                {{this.formattedTime}}
+              </td>
+
+            </tr>
+
+            {{else}}
+
+            <tr>
+              <td colspan="8" class="px-5 py-10 text-center text-slate-400">
+                No attendance activity logs found.
+              </td>
+            </tr>
+
+            {{/each}}
+
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+
+    <footer class="text-center text-sm text-slate-400 mt-10">
+      © 2026 StaffPay — RestoFlow. All rights reserved.
+    </footer>
+
+  </div>
+
+</body>
+</html>

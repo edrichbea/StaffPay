@@ -1,0 +1,108 @@
+{{> head}}
+<body class="bg-gray-100 min-h-screen">
+
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-900 text-white p-6 hidden md:block">
+      <h1 class="text-2xl font-bold text-yellow-400 mb-2">StaffPay</h1>
+      <p class="text-gray-400 text-sm mb-10">Employee Portal</p>
+
+      <nav class="space-y-3">
+        <a href="/dashboard" class="block px-4 py-3 rounded-lg hover:bg-slate-700">
+          Dashboard
+        </a>
+
+        <a href="/my-attendance" class="block px-4 py-3 rounded-lg bg-yellow-500 text-slate-900 font-semibold">
+          My Attendance
+        </a>
+
+        <a href="/my-payroll" class="block px-4 py-3 rounded-lg hover:bg-slate-700">
+          My Payroll
+        </a>
+
+        <a href="/logout" class="block px-4 py-3 rounded-lg hover:bg-red-600 mt-10">
+          Logout
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 md:p-10">
+
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-slate-900">My Attendance</h2>
+          <p class="text-gray-500 mt-2">View your personal attendance history.</p>
+        </div>
+
+        <span class="mt-4 sm:mt-0 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-semibold">
+          Attendance Records
+        </span>
+      </div>
+
+      <!-- Attendance Card -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+
+        <div class="bg-slate-900 text-white p-5">
+          <h3 class="text-lg font-semibold">Attendance History</h3>
+          <p class="text-gray-300 text-sm mt-1">Your recorded time-in and time-out details</p>
+        </div>
+
+        <div class="overflow-x-auto p-5">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-100 text-slate-700">
+                <th class="p-4 border-b">Date</th>
+                <th class="p-4 border-b">Time In</th>
+                <th class="p-4 border-b">Time Out</th>
+                <th class="p-4 border-b">Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {{#each attendances}}
+              <tr class="hover:bg-gray-50">
+                <td class="p-4 border-b text-gray-700">{{this.attendance_date}}</td>
+                <td class="p-4 border-b text-gray-700">{{this.time_in}}</td>
+                <td class="p-4 border-b text-gray-700">{{this.time_out}}</td>
+                <td class="p-4 border-b">
+                  {{#if (eq this.status "present")}}
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">Present</span>
+                  {{else if (eq this.status "late")}}
+                    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold">Late</span>
+                  {{else if (eq this.status "absent")}}
+                    <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">Absent</span>
+                  {{else}}
+                    <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-semibold">{{this.status}}</span>
+                  {{/if}}
+                </td>
+              </tr>
+              {{else}}
+              <tr>
+                <td colspan="4" class="p-8 text-center text-gray-500">
+                  No attendance records found.
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <div class="mt-6">
+        <a href="/dashboard" class="inline-block bg-slate-900 hover:bg-slate-700 text-white px-5 py-3 rounded-lg font-medium">
+          Back to Dashboard
+        </a>
+      </div>
+
+      <footer class="mt-10 text-center text-gray-400 text-sm">
+        © 2026 StaffPay | Restaurant Staff Attendance and Payroll Management System
+      </footer>
+
+    </main>
+  </div>
+
+</body>
+</html>
